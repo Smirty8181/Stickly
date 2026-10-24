@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Stickly — заметки и задачи</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Stickly — главная">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>Stickly</span>
+      </a>
+      <button class="create-button" id="create-note" type="button">
+        <span aria-hidden="true">＋</span> Новый стикер
+      </button>
+      <nav class="navigation" aria-label="Разделы">
+        <button class="nav-item is-active" data-page="notes" data-status="all" type="button">
+          <span class="nav-icon" aria-hidden="true">▦</span>
+          <span>Все заметки</span><span class="nav-count" id="all-count">0</span>
+        </button>
+        <button class="nav-item" data-page="notes" data-status="active" type="button">
+          <span class="nav-icon" aria-hidden="true">✳</span>
+          <span>Активные</span>
+        </button>
+        <button class="nav-item" data-page="notes" data-status="archived" type="button">
+          <span class="nav-icon" aria-hidden="true">▤</span>
+          <span>Архив</span>
+        </button>
+        <button class="nav-item" data-page="tasks" type="button">
+          <span class="nav-icon" aria-hidden="true">☑</span>
+          <span>Задачи</span><span class="nav-count" id="task-count">0</span>
+        </button>
+        <button class="nav-item" data-page="trash" type="button">
+          <span class="nav-icon" aria-hidden="true">⌑</span>
+          <span>Корзина</span><span class="nav-count" id="trash-count">0</span>
+        </button>
+      </nav>
+      <section class="sidebar-summary" aria-label="Статистика">
+        <p class="section-label">ВАШ ПРОГРЕСС</p>
+        <div class="summary-line"><span>Стикеров</span><strong id="stat-notes">0</strong></div>
+        <div class="summary-line"><span>Задач впереди</span><strong id="stat-active">0</strong></div>
+        <div class="summary-line"><span>Выполнено</span><strong id="stat-done">0</strong></div>
+        <div class="summary-track"><span id="stat-progress"></span></div>
+      </section>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-tools">
+        <button class="tool-button" id="settings-open" type="button">
+          <span aria-hidden="true">⚙</span> Настройки
+        </button>
+        <div class="data-tools">
+          <button class="tool-button" id="export-notes" type="button">Экспорт</button>
+          <button class="tool-button" id="import-notes" type="button">Импорт</button>
+        </div>
+        <button class="tool-button backup-button" id="backup-database" type="button">
+          Создать резервную копию
+        </button>
+        <p class="sidebar-footnote">Личные заметки хранятся только на этом устройстве</p>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="page-eyebrow">ВАШЕ ПРОСТРАНСТВО</p>
+          <h1 id="page-title">Мои заметки</h1>
+          <p class="page-description" id="page-description">Мысли и дела — собраны в одном месте.</p>
+        </div>
+        <div class="topbar-actions">
+          <span class="sync-indicator"><i></i> Сохранено на устройстве</span>
+          <button class="top-create-button" id="top-create" type="button">＋ Создать стикер</button>
+          <button class="window-close" id="close-main" type="button" aria-label="Закрыть главную панель" title="Закрыть Stickly">×</button>
+        </div>
+      </header>
+
+      <section class="page-view is-current" id="notes-view" aria-label="Заметки">
+        <div class="filter-bar">
+          <label class="search-box">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.7" cy="8.7" r="5.7"></circle><path d="m13 13 4 4"></path></svg>
+            <input id="search-notes" type="search" placeholder="Найти заметку…" autocomplete="off">
+            <kbd>Ctrl F</kbd>
+          </label>
+          <select id="color-filter" aria-label="Фильтр по цвету">
+            <option value="all">Все цвета</option>
+            <option value="yellow">Жёлтый</option>
+            <option value="pink">Розовый</option>
+            <option value="mint">Мятный</option>
+            <option value="blue">Голубой</option>
+            <option value="lavender">Лавандовый</option>
+            <option value="peach">Персиковый</option>
+            <option value="gray">Серый</option>
+            <option value="graphite">Графитовый</option>
+            <option value="cream">Кремовый</option>
+            <option value="dark">Тёмный</option>
+            <option value="custom">Свой</option>
+          </select>
+          <select id="sort-filter" aria-label="Сортировка заметок">
+            <option value="updated">Сначала изменённые</option>
+            <option value="created">Сначала созданные</option>
+          </select>
+          <div class="view-switch" role="group" aria-label="Вид заметок">
+            <button class="is-selected" data-view="grid" type="button" aria-label="Сетка" title="Сетка">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="5" height="5" rx="1"></rect><rect x="12" y="3" width="5" height="5" rx="1"></rect><rect x="3" y="12" width="5" height="5" rx="1"></rect><rect x="12" y="12" width="5" height="5" rx="1"></rect></svg>
+            </button>
+            <button data-view="list" type="button" aria-label="Список" title="Список">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5h10M7 10h10M7 15h10"></path><circle cx="3.5" cy="5" r=".7"></circle><circle cx="3.5" cy="10" r=".7"></circle><circle cx="3.5" cy="15" r=".7"></circle></svg>
+            </button>
+          </div>
+        </div>
+        <div class="results-line">
+          <span id="results-label">Все заметки</span>
+          <span id="results-total">0 заметок</span>
+        </div>
+        <div class="notes-grid" id="notes-grid"></div>
+      </section>
+
+      <section class="page-view" id="tasks-view" aria-label="Список задач" hidden>
+        <div class="list-heading">
+          <div><p class="eyebrow">МАЛЕНЬКИЕ ШАГИ</p><h2>Задачи</h2></div>
+          <select id="task-filter" aria-label="Фильтр задач">
+            <option value="all">Все задачи</option>
+            <option value="active">Активные</option>
+            <option value="completed">Выполненные</option>
+          </select>
+        </div>
+        <div class="task-board" id="task-board"></div>
+      </section>
+
+      <section class="page-view" id="trash-view" aria-label="Корзина" hidden>
+        <div class="list-heading">
+          <div><p class="eyebrow">МОЖНО ВЕРНУТЬ</p><h2>Корзина</h2></div>
+          <button class="danger-outline" id="empty-trash" type="button">Очистить корзину</button>
+        </div>
+        <div class="trash-board" id="trash-board"></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="settings-dialog" id="settings-dialog">
+    <form method="dialog" id="settings-form">
+      <header class="dialog-heading">
+        <div><p class="eyebrow">ПОД ВАС</p><h2>Настройки</h2></div>
+        <button class="dialog-close" value="cancel" aria-label="Закрыть">×</button>
+      </header>
+      <div class="settings-content">
+        <section class="settings-section">
+          <h3>Поведение приложения</h3>
+          <label class="setting-toggle"><span><strong>Запускать вместе с Windows</strong><small>Stickly будет доступен сразу после входа</small></span><input type="checkbox" name="start_with_windows"><i></i></label>
+          <label class="setting-toggle"><span><strong>Глобальные сочетания клавиш</strong><small>Alt + Ctrl + N — новый стикер · H — Stickly · S — показать/скрыть</small></span><input type="checkbox" name="global_hotkeys"><i></i></label>
+          <label class="setting-toggle"><span><strong>Сворачивать в трей при закрытии</strong><small>Заметки останутся на рабочем столе</small></span><input type="checkbox" name="close_to_tray"><i></i></label>
+        </section>
+        <section class="settings-section">
+          <h3>Новые стикеры</h3>
+          <label class="setting-field"><span>Цвет бумаги</span><select name="default_color">
+            <option value="yellow">Жёлтый</option><option value="pink">Розовый</option>
+            <option value="mint">Мятный</option><option value="blue">Голубой</option>
+            <option value="lavender">Лавандовый</option><option value="peach">Персиковый</option>
+            <option value="gray">Серый</option><option value="graphite">Графитовый</option>
+            <option value="cream">Кремовый</option><option value="dark">Тёмный</option>
+          </select></label>
+          <div class="settings-row">
+            <label class="setting-field"><span>Ширина</span><input name="default_width" type="number" min="220" max="900" step="10"><small>пикселей</small></label>
+            <label class="setting-field"><span>Высота</span><input name="default_height" type="number" min="180" max="1000" step="10"><small>пикселей</small></label>
+          </div>
+          <div class="settings-row">
+            <label class="setting-field"><span>Размер текста</span><input name="default_font_size" type="number" min="9" max="32"><small>пунктов</small></label>
+            <label class="setting-field"><span>Автосохранение</span><input name="autosave_delay" type="number" min="300" max="5000" step="100"><small>миллисекунд</small></label>
+          </div>
+        </section>
+      </div>
+      <footer class="dialog-footer">
+        <button class="secondary-button" value="cancel">Отмена</button>
+        <button class="top-create-button" id="save-settings" type="button">Сохранить</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="confirm-dialog" id="confirm-dialog">
+    <form method="dialog">
+      <p class="eyebrow">ПОДТВЕРЖДЕНИЕ</p>
+      <h2 id="confirm-title">Продолжить?</h2>
+      <p id="confirm-message"></p>
+      <footer class="dialog-footer">
+        <button class="secondary-button" value="cancel">Отмена</button>
+        <button class="danger-button" id="confirm-accept" value="confirm">Подтвердить</button>
+      </footer>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="dashboard.js" defer></script>
+</body>
+</html>

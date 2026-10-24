@@ -1,0 +1,1 @@
+"""Stickly desktop notes application."""

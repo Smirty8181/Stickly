@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Stickly — стикер</title>
+  <link rel="stylesheet" href="sticker.css">
+</head>
+<body>
+  <main class="stage">
+    <article class="paper" id="paper" data-color="yellow">
+      <div class="paper-grain" aria-hidden="true"></div>
+      <div class="paper-content">
+        <header class="toolbar" id="drag-region">
+          <span class="brand"><span class="brand-dot"></span> STICKLY</span>
+          <nav class="actions" aria-label="Действия со стикером">
+            <button class="icon-button pin-button" id="pin" type="button"
+                    aria-label="Закрепить поверх окон" title="Поверх окон">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8l-1 5 3 3v2h-5v6l-1 1-1-1v-6H6v-2l3-3-1-5Z"/></svg>
+            </button>
+            <button class="icon-button" id="palette-toggle" type="button"
+                    aria-label="Выбрать цвет бумаги" title="Цвет бумаги">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18h1.4a2.6 2.6 0 0 0 1.8-4.5 1.3 1.3 0 0 1 .9-2.2H18a3 3 0 0 0 3-3c0-4.6-4-8.3-9-8.3Z"/><path d="M7.5 12h.1m2.3-4h.1m4.3 0h.1m2.1 4h.1"/></svg>
+            </button>
+            <button class="icon-button" id="more-toggle" type="button"
+                    aria-label="Дополнительные действия" title="Ещё">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+            </button>
+            <button class="icon-button" id="hide" type="button"
+                    aria-label="Свернуть стикер в трей" title="Скрыть стикер">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+            </button>
+          </nav>
+        </header>
+        <div class="popover palette-popover" id="palette" hidden>
+          <button type="button" data-color="yellow" aria-label="Жёлтая бумага" title="Жёлтая"></button>
+          <button type="button" data-color="pink" aria-label="Розовая бумага" title="Розовая"></button>
+          <button type="button" data-color="mint" aria-label="Мятная бумага" title="Мятная"></button>
+          <button type="button" data-color="blue" aria-label="Голубая бумага" title="Голубая"></button>
+          <button type="button" data-color="lavender" aria-label="Лавандовая бумага" title="Лавандовая"></button>
+          <button type="button" data-color="peach" aria-label="Персиковая бумага" title="Персиковая"></button>
+          <button type="button" data-color="gray" aria-label="Серая бумага" title="Серая"></button>
+          <button type="button" data-color="graphite" aria-label="Графитовая бумага" title="Графитовая"></button>
+          <label class="custom-color" title="Свой цвет">
+            <span aria-hidden="true">+</span>
+            <input id="custom-color" type="color" aria-label="Выбрать свой цвет бумаги">
+          </label>
+        </div>
+        <div class="popover more-popover" id="more" hidden>
+          <button type="button" data-action="duplicate">Создать копию</button>
+          <button type="button" data-action="archive">Переместить в архив</button>
+          <button type="button" data-action="trash">Переместить в корзину</button>
+          <span class="menu-divider"></span>
+          <button type="button" data-action="font-down">Уменьшить текст</button>
+          <button type="button" data-action="font-up">Увеличить текст</button>
+        </div>
+        <section class="writing">
+          <label class="visually-hidden" for="title">Заголовок</label>
+          <input class="title" id="title" maxlength="500" placeholder="Заголовок"
+                 autocomplete="off" spellcheck="false">
+          <label class="visually-hidden" for="body">Текст заметки</label>
+          <textarea class="body" id="body" placeholder="Запишите важное…"
+                    spellcheck="true"></textarea>
+        </section>
+        <section class="tasks" aria-labelledby="task-heading">
+          <div class="task-heading-row">
+            <h2 id="task-heading">Задачи</h2>
+            <span class="task-count" id="task-count">0 из 0</span>
+          </div>
+          <div class="task-list" id="task-list"></div>
+          <label class="visually-hidden" for="task-input">Новая задача</label>
+          <input class="task-input" id="task-input" placeholder="+ Добавить задачу · Enter"
+                 maxlength="500" autocomplete="off">
+          <div class="task-progress" aria-hidden="true"><span id="task-progress"></span></div>
+        </section>
+        <footer class="paper-footer">
+          <span id="save-status" aria-live="polite">Сохранено</span>
+          <span class="resize-grip" id="resize-grip" role="button" tabindex="0"
+                aria-label="Изменить размер стикера" title="Потяните, чтобы изменить размер">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16 4 4 16M16 9 9 16M16 14l-2 2"/></svg>
+          </span>
+        </footer>
+      </div>
+      <div class="paper-fold" aria-hidden="true"></div>
+    </article>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="sticker.js" defer></script>
+</body>
+</html>
